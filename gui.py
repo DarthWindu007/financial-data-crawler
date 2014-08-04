@@ -6,5 +6,6 @@ from extractdata import *
 
 
 if __name__ == '__main__':
+	root = Tk()
 	data = extract_data("table.csv")
 	print(data[1])
