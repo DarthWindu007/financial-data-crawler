@@ -34,4 +34,4 @@ if __name__ == '__main__':
 	# This is just for testing purposes mainly, probably won't call this function
 	fname = sys.argv[1]
 	data = extract_data(fname)
-	print(data[1])
+	print(data)

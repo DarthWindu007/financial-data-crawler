@@ -3,6 +3,8 @@ try:
 except:
 	raise ImportError("Please install tkinter module for python3")
 from extractdata import *
+from stock import *
+
 import matplotlib
 matplotlib.use('TkAgg')
 from numpy import *
@@ -46,6 +48,7 @@ class App(object):
 		x = list(map(mdates.strpdate2num("%m/%d/%Y"),map(lambda x: x[0],data[1:])))
 		y = list(map(lambda x: x[-1],data[1:]))
 		figure1a.plot_date(x,y,"b-")
+		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
 		# figure1a.title(str(data[0][-1]))
 		# figure1a.xlabel("Date")
 		# figure1a.ylabel(str(data[0][-1]))
@@ -59,10 +62,15 @@ class App(object):
 		self.button.grid(row=0,column=0)
 
 if __name__ == '__main__':
-	data = extract_data("table.csv")
+	s = get_history("GOOG", 2014, 1, 1, 2014, 8, 5)
+	fname = "newdoc.csv"
+	f = open(fname,"w+")
+	f.write(s)
+	f.close()
+	data = extract_data(fname)
 	root = Tk()
 	app = App(root,data)
 	root.mainloop()
 
-	
-	print(data[1])
+	# print(data)
+	# print(s)
