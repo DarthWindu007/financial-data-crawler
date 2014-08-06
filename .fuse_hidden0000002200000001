@@ -25,9 +25,9 @@ class App(object):
 		self.master = master
 		self.ScreenSizeX = master.winfo_screenwidth()  # Get screen width [pixels]
 		self.ScreenSizeY = master.winfo_screenheight() # Get screen height [pixels]
-		self.ScreenRatio = 0.7                           # Set the screen ratio for width and height
+		self.ScreenRatio = 0.5                              # Set the screen ratio for width and height
 		self.FrameSizeX  = int(self.ScreenSizeX * self.ScreenRatio)
-		self.FrameSizeY  = int(self.ScreenSizeY * self.ScreenRatio)
+		self.FrameSizeY  = int(self.ScreenSizeY * self.ScreenRatio*1.5)
 		self.FramePosX   = (self.ScreenSizeX - self.FrameSizeX)/2 # Find left and up border of window
 		self.FramePosY   = (self.ScreenSizeY - self.FrameSizeY)/2
 
@@ -41,12 +41,7 @@ class App(object):
 		self.button_width = 5
 		self.button_height = 2
 
-		self.user_entry = Entry(self.frame)
-		self.user_entry.grid(row=0,column=1)
-		self.user_entry.insert(0,"Enter a Company")
-
-
-		figure1 = Figure(figsize=(6,4),dpi=100)
+		figure1 = Figure(figsize=(10,4),dpi=100)
 		figure1a = figure1.add_subplot(111)
 		test_x = arange(0.0,3.0,0.01)
 		test_y = sin(2*pi*test_x)
@@ -58,7 +53,7 @@ class App(object):
 		# figure1a.xlabel("Date")
 		# figure1a.ylabel(str(data[0][-1]))
 		
-		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
+		dataPlot = FigureCanvasTkAgg(figure1, master=master)
 		dataPlot.show()
 		dataPlot.get_tk_widget().grid(row=1,column=1)
 
@@ -66,34 +61,13 @@ class App(object):
 			text="Quit",fg="red",command=self.frame.quit)
 		self.button.grid(row=0,column=0)
 
-		self.buy_label = Label(self.frame,text="BUY!",bg="dark green",fg="light green")
-		self.buy_label.grid(row=1,column=2)
-
-		self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink")
-		self.sell_label.grid(row=1,column=3)
-
-		# self.button = Button(self.frame,height=self.button_height,width=self.button_width,
-		# 	text="Submit",bg="blue",command=self.get_info(self.user_entry.get()))
-		# self.button.grid(row=0,column=2)
-
-		# Label(self.frame,text="Enter Amount: ").grid(row=4,column=2)
-	def get_info(self,cname):
-		s = get_history(self.user_entry.get(), 2014, 1, 1, 2014, 8, 5)
-		fname = "newdoc.csv"
-		f = open(fname,"w+")
-		f.write(s)
-		f.close()
-		self.data = extract_data(fname)
-
 if __name__ == '__main__':
-
 	s = get_history("GOOG", 2014, 1, 1, 2014, 8, 5)
 	fname = "newdoc.csv"
 	f = open(fname,"w+")
 	f.write(s)
 	f.close()
 	data = extract_data(fname)
-
 	root = Tk()
 	app = App(root,data)
 	root.mainloop()
