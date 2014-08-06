@@ -15,4 +15,5 @@ def get(stock_name):
     headlines=[]
     for item in channel.findall("item"):
         headlines.append(item.find("title").text)
+    print(headlines)
     return headlines
