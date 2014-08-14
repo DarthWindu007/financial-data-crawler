@@ -2,7 +2,7 @@ import urllib.request
 import sys
 import xml.etree.ElementTree as ET
 
-def get(stock_name):
+def get_history(stock_name):
     """
     Argument: stock_name as string, e.g. "YHOO", "GOOG"
     Return value: list of headlines (strings), from the Yahoo RSS feed
@@ -15,5 +15,4 @@ def get(stock_name):
     headlines=[]
     for item in channel.findall("item"):
         headlines.append(item.find("title").text)
-    print(headlines)
     return headlines
