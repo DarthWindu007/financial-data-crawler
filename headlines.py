@@ -13,12 +13,12 @@ def get_headlines(stock_name):
     urls=[]
     urls.append("http://finance.yahoo.com/rss/headline?s="+stock_name)
     urls.append("https://news.google.com/news/feeds?hl=en&q="+stock_name+"&output=rss")
+    headlines=[]
     for url in urls:
         page=urllib.request.urlopen(url).read().decode()
         # extract the headlines from the page
         root=ET.fromstring(page)
         channel=root[0]
-        headlines=[]
         for item in channel.findall("item"):
             headlines.append(item.find("title").text)
     return headlines
@@ -28,4 +28,4 @@ def get_score(stock_name):
     returns a score based on headlines and financial terms dictionary
     """
     headlines=get_headlines(stock_name)
-    return compare_headlines(headlines)
+    return compare_headlines(headlines)/len(headlines)
