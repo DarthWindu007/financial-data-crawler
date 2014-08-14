@@ -12,6 +12,7 @@ import matplotlib.dates as mdates
 from matplotlib.figure import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 import sys
+from ttkcalendar import *
 
 
 class App(object):
@@ -25,7 +26,7 @@ class App(object):
 		self.master = master
 		self.ScreenSizeX = master.winfo_screenwidth()  # Get screen width [pixels]
 		self.ScreenSizeY = master.winfo_screenheight() # Get screen height [pixels]
-		self.ScreenRatio = 0.7                           # Set the screen ratio for width and height
+		self.ScreenRatio = 0.75                           # Set the screen ratio for width and height
 		self.FrameSizeX  = int(self.ScreenSizeX * self.ScreenRatio)
 		self.FrameSizeY  = int(self.ScreenSizeY * self.ScreenRatio)
 		self.FramePosX   = (self.ScreenSizeX - self.FrameSizeX)/2 # Find left and up border of window
@@ -36,7 +37,7 @@ class App(object):
 		master.title("Financial Data")
 
 		self.frame = Frame(master)
-		self.frame.grid()
+		self.frame.grid(sticky=N+W+S+E)
 
 		self.button_width = 5
 		self.button_height = 2
@@ -45,50 +46,62 @@ class App(object):
 		self.stock_name_var.set("GOOG")
 
 		self.user_entry = Entry(self.frame)
-		self.user_entry.grid(row=0,column=1)
+		self.user_entry.grid(row=0,column=1,columnspan=3,sticky=W+N+S)
 		self.user_entry.insert(0,"Enter a Company")
 		self.user_entry.bind('<Return>', lambda event: self.comp_s(self.user_entry.get()))
 
-		s = get_history(self.stock_name_var.get(), 2014, 1, 1, 2014, 8, 5)
-		fname = "newdoc.csv"
-		f = open(fname,"w+")
-		f.write(s)
-		f.close()
-		self.data = extract_data(fname)
-
-
-		figure1 = Figure(figsize=(6,4),dpi=100)
-		figure1a = figure1.add_subplot(111)
-		test_x = arange(0.0,3.0,0.01)
-		test_y = sin(2*pi*test_x)
-		x = list(map(mdates.strpdate2num("%m/%d/%Y"),map(lambda x: x[0],self.data[1:])))
-		y = list(map(lambda x: x[-1],self.data[1:]))
-		x = x[::-1]
-		y = y[::-1]
-		figure1a.plot_date(x,y,"b-")
-		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
-		# figure1a.title(str(data[0][-1]))
-		# figure1a.xlabel("Date")
-		# figure1a.ylabel(str(data[0][-1]))
+		self.start_date_entry = Calendar(self.frame)
+		self.start_date_entry.grid(row=0,column=2,rowspan=4,sticky=W+E+N)
 		
-		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
-		dataPlot.show()
-		dataPlot.get_tk_widget().grid(row=1,column=1)
-
-		self.button = Button(self.frame,height=self.button_height,width=self.button_width,
-			text="Quit",fg="red",command=self.frame.quit)
-		self.button.grid(row=0,column=0)
-
-		self.buy_label = Label(self.frame,text="BUY!",bg="dark green",fg="light green",height=self.button_height,width=self.button_width)
-		self.buy_label.grid(row=1,column=2)
-
-		self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink",height=self.button_height,width=self.button_width)
-		self.sell_label.grid(row=1,column=3)
+		self.end_date_entry = Calendar(self.frame)
+		self.end_date_entry.grid(row=0,column=3,rowspan=4,sticky=W+E+N)
+		if 'win' not in sys.platform:
+			style = ttk.Style()
+			style.theme_use('clam')
 
 		self.str_msg_var = StringVar()
 		self.str_msg_var.set(get_info("GOOG"))
-		self.msg = Message(self.frame,textvariable=self.str_msg_var,width=800,bg="white",pady=10)
-		self.msg.grid(row=5,column=4)
+		self.msg = Message(self.frame,textvariable=self.str_msg_var,width=800,bg="white")
+		self.msg.grid(row=3,column=0,sticky=W+N)
+
+		self.comp_s(self.stock_name_var.get())
+		# s = get_history(self.stock_name_var.get(), 2014, 1, 1, 2014, 8, 5)
+		# fname = "newdoc.csv"
+		# f = open(fname,"w+")
+		# f.write(s)
+		# f.close()
+		# self.data = extract_data(fname)
+
+
+		# figure1 = Figure(figsize=(6,4),dpi=100)
+		# figure1a = figure1.add_subplot(111)
+		# test_x = arange(0.0,3.0,0.01)
+		# test_y = sin(2*pi*test_x)
+		# x = list(map(mdates.strpdate2num("%m/%d/%Y"),map(lambda x: x[0],self.data[1:])))
+		# y = list(map(lambda x: x[-1],self.data[1:]))
+		# x = x[::-1]
+		# y = y[::-1]
+		# figure1a.plot_date(x,y,"b-")
+		# figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
+		# # figure1a.title(str(data[0][-1]))
+		# # figure1a.xlabel("Date")
+		# # figure1a.ylabel(str(data[0][-1]))
+		
+		# dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
+		# dataPlot.show()
+		# dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
+
+		self.button = Button(self.frame,height=self.button_height,width=self.button_width,
+			text="Quit",fg="red",command=self.frame.quit)
+		self.button.grid(row=0,column=0,sticky=W+N+S)
+
+		self.buy_label = Label(self.frame,text="BUY!",bg="dark green",fg="light green",height=self.button_height,width=self.button_width)
+		self.buy_label.grid(row=1,column=2,sticky=W)
+
+		self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink",height=self.button_height,width=self.button_width)
+		self.sell_label.grid(row=1,column=3,columnspan=2,sticky=W)
+
+
 
 
 		
@@ -131,13 +144,14 @@ class App(object):
 		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
 		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
 		dataPlot.show()
-		dataPlot.get_tk_widget().grid(row=1,column=1)
+		dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
 
 		pass
 if __name__ == '__main__':
 
 	root = Tk()
 	app = App(root)
+	# print(app.start_date_entry.selection)
 	root.mainloop()
 
 	# print(data)
