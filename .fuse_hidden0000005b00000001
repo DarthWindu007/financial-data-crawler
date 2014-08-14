@@ -4,7 +4,7 @@ except:
 	raise ImportError("Please install tkinter module for python3")
 from extractdata import *
 from stock import *
-import calendar
+
 import matplotlib
 matplotlib.use('TkAgg')
 from numpy import *
@@ -43,11 +43,11 @@ class App(object):
 		self.button_height = 2
 
 		self.stock_name_var = StringVar()
-		self.stock_name_var.set("GOOGL")
+		self.stock_name_var.set("GOOG")
 
 		self.user_entry = Entry(self.frame)
 		self.user_entry.grid(row=0,column=1,columnspan=3,sticky=W+N+S)
-		self.user_entry.insert(0,self.stock_name_var.get())
+		self.user_entry.insert(0,"Enter a Company")
 		self.user_entry.bind('<Return>', lambda event: self.comp_s(self.user_entry.get()))
 
 		self.start_date_entry = Calendar(self.frame)
@@ -101,7 +101,7 @@ class App(object):
 		self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink",height=self.button_height,width=self.button_width)
 		self.sell_label.grid(row=1,column=3,columnspan=2,sticky=W)
 
-		# print(self.start_date_entry.selection)
+
 
 
 		
@@ -124,16 +124,7 @@ class App(object):
 		self.str_msg_var.set(get_info(stock_name))
 		self.stock_name_var.set(stock_name)
 
-		start_d = self.start_date_entry.selection
-		end_d = self.end_date_entry.selection
-		if start_d == None:
-			start_d = calendar.datetime.datetime(2014,1,1)
-		if end_d == None:
-			end_d = calendar.datetime.datetime.now()
-
-		# print(start_d,end_d)
-
-		s = get_history(self.stock_name_var.get(), start_d.year, start_d.month, start_d.day, end_d.year, end_d.month, end_d.day)
+		s = get_history(self.stock_name_var.get(), 2014, 1, 1, 2014, 8, 5)
 		fname = "newdoc.csv"
 		f = open(fname,"w+")
 		f.write(s)
@@ -149,20 +140,19 @@ class App(object):
 		y = list(map(lambda x: x[-1],self.data[1:]))
 		x = x[::-1]
 		y = y[::-1]
-		# print(x)
 		figure1a.plot_date(x,y,"b-")
 		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
 		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
 		dataPlot.show()
 		dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
 
-		# pass
+		pass
 if __name__ == '__main__':
 
 	root = Tk()
 	app = App(root)
 	# print(app.start_date_entry.selection)
 	root.mainloop()
-	# print(mdates.num2date(735319))
+
 	# print(data)
 	# print(s)

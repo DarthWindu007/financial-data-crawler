@@ -23,7 +23,8 @@ def get_history(stock_name, a_year, a_month, a_day, z_year, z_month, z_day):
     2014-Jan-1 to 2014-Aug-5
     """
     url="http://real-chart.finance.yahoo.com/table.csv?s="+stock_name
-    url+="&c="+str(a_year)+"&a="+str(a_month-1)+"&b="+str(a_day)
-    url+="&f="+str(z_year)+"&d="+str(z_month-1)+"&e="+str(z_day)
+    url+="&a="+str(a_month-1)+"&b="+str(a_day)+"&c="+str(a_year)
+    url+="&d="+str(z_month-1)+"&e="+str(z_day)+"&f="+str(z_year)
+    # print("url:",url)
     csv=urllib.request.urlopen(url).read().decode()
     return csv
