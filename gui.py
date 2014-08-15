@@ -165,15 +165,24 @@ class App(object):
 		x = x[::-1]
 		y = y[::-1]
 		# print(x)
-		# call(["python2", "orangehelper.py"])
-		[reg,tpl] = analysetrend(fname,"trend.csv",0.7)
+		call(["python2", "orangehelper.py"])
+		# [reg,tpl] = analysetrend(fname,"trend.csv",0.7)
 		# print(reg)
 		# print(tpl)
-		tpl = tpl[::-1]
+		# tpl = tpl[::-1]
+		tpl2 = []
+		xtpl = []
+		tpfn = open("orangetrend.txt")
+		for each in tpfn:
+			if each == "":
+				continue
+			line = each.strip().split(",")
+			tpl2.append(float(line[-1]))
+			xtpl.append(float(line[0]))
 
 
 		figure1a.plot_date(x,y,"b-")
-		figure1a.plot_date(x,tpl,"r-")
+		figure1a.plot_date(xtpl,tpl2,"r-")
 
 		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
 		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)

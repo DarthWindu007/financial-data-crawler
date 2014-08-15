@@ -52,6 +52,7 @@ def get_lin_reg(x,y):
 		# print linspace
 		# exit(0)
 		f.write(str(linspace[i])+","+str(predictions[i])+"\n")
+		# f.write(str(predictions[i])+"\n")
 
 	f.close()
 
