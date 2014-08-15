@@ -5,6 +5,7 @@ except:
 from extractdata import *
 from stock import *
 from headlines import *
+from trendanalysis import *
 import calendar
 import matplotlib
 matplotlib.use('TkAgg')
@@ -161,11 +162,21 @@ class App(object):
 		x = x[::-1]
 		y = y[::-1]
 		# print(x)
+
+		[reg,tpl] = analysetrend(fname)
+		# print(reg)
+		# print(tpl)
+
+
 		figure1a.plot_date(x,y,"b-")
+		figure1a.plot_date(x,tpl,"r-")
+
 		figure1.autofmt_xdate(bottom=0.2, rotation=30, ha='right')
 		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
 		dataPlot.show()
 		dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
+		
+
 		self.suggestion()
 		# print(get_score(self.stock_name_var.get()))
 		# pass

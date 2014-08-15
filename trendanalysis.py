@@ -49,7 +49,7 @@ def analysetrend(filename = "table.csv", output_filename = "trend.csv", regressi
             if day_offset == 0 :
                 day_offset = time.mktime(datetime.datetime.strptime(row[0], "%Y-%m-%d").timetuple())/86400
             date_list.append(time.mktime(datetime.datetime.strptime(row[0], "%Y-%m-%d").timetuple())/86400 - day_offset + 1)
-            price_list.append(float(row[1]))
+            price_list.append(float(row[-1]))
             # If a line is not a data line (e.g. a column name line), it is skipped
         except ValueError :
             print("Skipping line")
