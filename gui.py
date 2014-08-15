@@ -9,6 +9,8 @@ from trendanalysis import *
 import calendar
 import matplotlib
 matplotlib.use('TkAgg')
+
+
 from numpy import *
 import matplotlib.dates as mdates
 from matplotlib.figure import *
