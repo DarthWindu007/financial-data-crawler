@@ -9,7 +9,6 @@ from trendanalysis import *
 import calendar
 import matplotlib
 matplotlib.use('TkAgg')
-from subprocess import call
 
 
 from numpy import *
@@ -165,11 +164,10 @@ class App(object):
 		x = x[::-1]
 		y = y[::-1]
 		# print(x)
-		# call(["python2", "orangehelper.py"])
-		[reg,tpl] = analysetrend(fname,"trend.csv",0.7)
+
+		[reg,tpl] = analysetrend(fname)
 		# print(reg)
 		# print(tpl)
-		tpl = tpl[::-1]
 
 
 		figure1a.plot_date(x,y,"b-")
@@ -183,7 +181,7 @@ class App(object):
 
 		self.suggestion()
 		# print(get_score(self.stock_name_var.get()))
-		# pas
+		# pass
 if __name__ == '__main__':
 
 	root = Tk()
