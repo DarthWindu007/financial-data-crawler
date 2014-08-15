@@ -28,4 +28,5 @@ def get_score(stock_name):
     returns a score based on headlines and financial terms dictionary
     """
     headlines=get_headlines(stock_name)
+    # print(len(headlines))
     return compare_headlines(headlines)/len(headlines)

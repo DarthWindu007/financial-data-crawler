@@ -4,6 +4,7 @@ except:
 	raise ImportError("Please install tkinter module for python3")
 from extractdata import *
 from stock import *
+from headlines import *
 import calendar
 import matplotlib
 matplotlib.use('TkAgg')
@@ -64,7 +65,12 @@ class App(object):
 		self.msg = Message(self.frame,textvariable=self.str_msg_var,width=800,bg="white")
 		self.msg.grid(row=3,column=0,sticky=W+N)
 
+		self.button = Button(self.frame,height=self.button_height,width=self.button_width,
+			text="Quit",fg="red",command=self.frame.quit)
+		self.button.grid(row=0,column=0,sticky=W+N+S)
+
 		self.comp_s(self.stock_name_var.get())
+		self.suggestion()
 		# s = get_history(self.stock_name_var.get(), 2014, 1, 1, 2014, 8, 5)
 		# fname = "newdoc.csv"
 		# f = open(fname,"w+")
@@ -91,15 +97,7 @@ class App(object):
 		# dataPlot.show()
 		# dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
 
-		self.button = Button(self.frame,height=self.button_height,width=self.button_width,
-			text="Quit",fg="red",command=self.frame.quit)
-		self.button.grid(row=0,column=0,sticky=W+N+S)
 
-		self.buy_label = Label(self.frame,text="BUY!",bg="dark green",fg="light green",height=self.button_height,width=self.button_width)
-		self.buy_label.grid(row=1,column=2,sticky=W)
-
-		self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink",height=self.button_height,width=self.button_width)
-		self.sell_label.grid(row=1,column=3,columnspan=2,sticky=W)
 
 		# print(self.start_date_entry.selection)
 
@@ -117,6 +115,19 @@ class App(object):
 	# 	f.write(s)
 	# 	f.close()
 	# 	self.data = extract_data(fname)
+	def suggestion(self):
+		self.score = get_score(self.stock_name_var.get())
+		# print(self.score)
+		if self.score >= 0.05:
+			self.buy_label = Label(self.frame,text="BUY!",bg="dark green",fg="light green",height=self.button_height,width=self.button_width)
+			self.buy_label.grid(row=1,column=2,sticky=W)
+		elif self.score <= -0.05:
+			self.sell_label = Label(self.frame,text="SELL!",bg="dark red",fg="pink",height=self.button_height,width=self.button_width)
+			self.sell_label.grid(row=1,column=2,sticky=W)
+		else:
+			self.hold_label = Label(self.frame,text="HOLD!",bg="dark blue",fg="light blue",height=self.button_height,width=self.button_width)
+			self.hold_label.grid(row=1,column=2,sticky=W)
+	
 	def comp_s(self,stock_name):
 		"""
 		Update the Stock information from the User Input
@@ -155,14 +166,30 @@ class App(object):
 		dataPlot = FigureCanvasTkAgg(figure1, master=self.frame)
 		dataPlot.show()
 		dataPlot.get_tk_widget().grid(row=1,column=0,columnspan=2,sticky=W+N+S)
-
+		self.suggestion()
+		# print(get_score(self.stock_name_var.get()))
 		# pass
 if __name__ == '__main__':
 
 	root = Tk()
 	app = App(root)
 	# print(app.start_date_entry.selection)
+	
 	root.mainloop()
+
+	# print(get_score("GOOGL"))
+	# print(get_score("CSCO"))
+	# print(get_score("SIRI"))
+	# print(get_score("MSFT"))
+	# print(get_score("Dow"))
+	# print(get_score("BAC"))
+	# print(get_score("JCP"))
+	# print(get_score("ORCL"))
+	# print(get_score("AMD"))
+	# print(get_score("VALE"))
+	# print(get_score("AAPL"))
+	# print(get_score("S"))
+	# print(get_score("KMI"))
 	# print(mdates.num2date(735319))
 	# print(data)
 	# print(s)
